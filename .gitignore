@@ -1,0 +1,54 @@
+# İstanbul Nakliyat - Git Ignore File
+
+# Configuration files (keep config.sample.php in repo)
+/config/config.php
+
+# Installation file (remove after first install)
+install.php
+
+# Log files
+*.log
+/logs/
+
+# Cache files
+/cache/
+*.cache
+
+# Uploaded files
+/public/uploads/
+/public/assets/images/uploads/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Composer (if used)
+/vendor/
+composer.lock
+
+# NPM (if used)
+node_modules/
+package-lock.json
+
+# Environment files
+.env
+.env.local
+
+# Backup files
+*.sql.backup
+*.bak
+/backups/
