@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: <?= SITE_URL ?>/sitemap.xml
+
+# Disallow admin area
+Disallow: /admin/
+
+# Disallow uploads directory
+Disallow: /uploads/
+
+# Disallow config files
+Disallow: /config/
+Disallow: /*.php$
+
+# Allow important pages
+Allow: /istanbul/
+Allow: /services
+Allow: /pricing
+Allow: /reviews
+Allow: /blog
+Allow: /contact
+
+# Crawl delay
+Crawl-delay: 1
