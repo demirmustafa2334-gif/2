@@ -4,21 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- SEO Meta Tags -->
+    <!-- SEO Meta Etiketleri -->
     <title><?php echo isset($pageTitle) ? $pageTitle : get_setting('site_title'); ?></title>
     <meta name="description" content="<?php echo isset($pageDescription) ? $pageDescription : get_setting('site_description'); ?>">
     <?php if (isset($pageKeywords)): ?>
         <meta name="keywords" content="<?php echo $pageKeywords; ?>">
     <?php endif; ?>
     
-    <!-- Open Graph Meta Tags -->
+    <!-- Open Graph Meta Etiketleri -->
     <meta property="og:title" content="<?php echo isset($pageTitle) ? $pageTitle : get_setting('site_title'); ?>">
     <meta property="og:description" content="<?php echo isset($pageDescription) ? $pageDescription : get_setting('site_description'); ?>">
     <meta property="og:type" content="website">
     <meta property="og:url" content="<?php echo SITE_URL . $_SERVER['REQUEST_URI']; ?>">
     <meta property="og:site_name" content="<?php echo get_setting('site_title'); ?>">
     
-    <!-- Twitter Card Meta Tags -->
+    <!-- Twitter Card Meta Etiketleri -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="<?php echo isset($pageTitle) ? $pageTitle : get_setting('site_title'); ?>">
     <meta name="twitter:description" content="<?php echo isset($pageDescription) ? $pageDescription : get_setting('site_description'); ?>">
@@ -35,7 +35,7 @@
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
-    <!-- Custom CSS -->
+    <!-- Özel CSS -->
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -54,7 +54,7 @@
             color: var(--dark-text);
         }
         
-        /* Header Styles */
+        /* Header Stilleri */
         .navbar {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -76,7 +76,7 @@
             transform: translateY(-2px);
         }
         
-        /* Hero Section */
+        /* Ana Banner */
         .hero-section {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             min-height: 70vh;
@@ -84,7 +84,7 @@
             align-items: center;
         }
         
-        /* Section Titles */
+        /* Bölüm Başlıkları */
         .section-title {
             position: relative;
             font-weight: 700;
@@ -103,7 +103,7 @@
             background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
         }
         
-        /* Service Cards */
+        /* Hizmet Kartları */
         .service-card {
             background: white;
             border-radius: 15px;
@@ -128,7 +128,7 @@
             margin: 0 auto;
         }
         
-        /* District Cards */
+        /* İlçe Kartları */
         .district-card .card {
             transition: all 0.3s ease;
         }
@@ -138,7 +138,7 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
         }
         
-        /* Review Cards */
+        /* Yorum Kartları */
         .review-card {
             background: white;
             border-radius: 15px;
@@ -156,7 +156,7 @@
             font-size: 1.2rem;
         }
         
-        /* Blog Cards */
+        /* Blog Kartları */
         .blog-card .card {
             transition: all 0.3s ease;
         }
@@ -166,7 +166,7 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
         }
         
-        /* Buttons */
+        /* Butonlar */
         .btn {
             border-radius: 25px;
             font-weight: 600;
@@ -253,7 +253,7 @@
             }
         }
         
-        /* Loading Animation */
+        /* Yükleme Animasyonu */
         .loading {
             display: inline-block;
             width: 20px;
@@ -268,7 +268,7 @@
             to { transform: rotate(360deg); }
         }
         
-        /* Form Styles */
+        /* Form Stilleri */
         .form-control:focus {
             border-color: var(--secondary-color);
             box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
@@ -295,11 +295,11 @@
         }
     </style>
     
-    <!-- Schema.org Structured Data -->
+    <!-- Schema.org Yapılandırılmış Veri -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "MovingCompany",
+        "@type": "LocalBusiness",
         "name": "<?php echo get_setting('site_title'); ?>",
         "description": "<?php echo get_setting('site_description'); ?>",
         "url": "<?php echo SITE_URL; ?>",
@@ -320,20 +320,20 @@
             "geoRadius": "50000"
         },
         "services": [
-            "Evden Eve Nakliyat",
-            "Ofis Taşımacılığı", 
-            "Eşya Depolama"
+            "Yerel Tanıtım",
+            "Bölgesel Rehberlik", 
+            "İşletme Tanıtımı"
         ]
     }
     </script>
 </head>
 <body>
-    <!-- Navigation -->
+    <!-- Navigasyon -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
             <a class="navbar-brand" href="<?php echo SITE_URL; ?>">
-                <i class="fas fa-truck me-2"></i>
-                İstanbul Nakliyat
+                <i class="fas fa-map-marked-alt me-2"></i>
+                Yerel Tanıtım
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -349,10 +349,10 @@
                         <a class="nav-link" href="hizmetlerimiz">Hizmetlerimiz</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="fiyat-listesi">Fiyatlar</a>
+                        <a class="nav-link" href="bolgelerimiz">Bölgelerimiz</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="musteri-yorumlari">Yorumlar</a>
+                        <a class="nav-link" href="yorumlar">Yorumlar</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="blog">Blog</a>
@@ -367,9 +367,9 @@
                         <i class="fas fa-phone me-1"></i>
                         <?php echo get_setting('contact_phone'); ?>
                     </a>
-                    <a href="fiyat-hesapla" class="btn btn-warning">
-                        <i class="fas fa-calculator me-1"></i>
-                        Fiyat Hesapla
+                    <a href="kesfet" class="btn btn-warning">
+                        <i class="fas fa-search me-1"></i>
+                        Keşfet
                     </a>
                 </div>
             </div>

@@ -2,15 +2,15 @@
     <footer class="footer py-5">
         <div class="container">
             <div class="row g-4">
-                <!-- Company Info -->
+                <!-- Şirket Bilgileri -->
                 <div class="col-lg-3 col-md-6">
                     <h5 class="mb-3">
-                        <i class="fas fa-truck me-2"></i>
-                        İstanbul Nakliyat
+                        <i class="fas fa-map-marked-alt me-2"></i>
+                        Yerel Tanıtım
                     </h5>
                     <p class="mb-3">
-                        İstanbul'un en güvenilir nakliyat firması olarak, 
-                        profesyonel ekibimizle hizmet veriyoruz.
+                        İstanbul'un en kapsamlı yerel tanıtım platformu olarak, 
+                        şehrimizin her köşesini tanıtmak için buradayız.
                     </p>
                     <div class="social-links">
                         <?php if (get_setting('facebook_url')): ?>
@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 
-                <!-- Quick Links -->
+                <!-- Hızlı Linkler -->
                 <div class="col-lg-2 col-md-6">
                     <h6 class="mb-3">Hızlı Linkler</h6>
                     <ul class="list-unstyled">
@@ -42,10 +42,10 @@
                             <a href="hizmetlerimiz">Hizmetlerimiz</a>
                         </li>
                         <li class="mb-2">
-                            <a href="fiyat-listesi">Fiyat Listesi</a>
+                            <a href="bolgelerimiz">Bölgelerimiz</a>
                         </li>
                         <li class="mb-2">
-                            <a href="musteri-yorumlari">Müşteri Yorumları</a>
+                            <a href="yorumlar">Kullanıcı Yorumları</a>
                         </li>
                         <li class="mb-2">
                             <a href="blog">Blog</a>
@@ -56,9 +56,9 @@
                     </ul>
                 </div>
                 
-                <!-- Districts -->
+                <!-- İlçeler -->
                 <div class="col-lg-3 col-md-6">
-                    <h6 class="mb-3">Hizmet Verdiğimiz İlçeler</h6>
+                    <h6 class="mb-3">Tanıttığımız İlçeler</h6>
                     <div class="row">
                         <?php 
                         $footerDistricts = new District();
@@ -90,7 +90,7 @@
                     </div>
                 </div>
                 
-                <!-- Contact Info -->
+                <!-- İletişim Bilgileri -->
                 <div class="col-lg-4 col-md-6">
                     <h6 class="mb-3">İletişim Bilgileri</h6>
                     <ul class="list-unstyled">
@@ -118,12 +118,12 @@
                         </li>
                     </ul>
                     
-                    <!-- Working Hours -->
+                    <!-- Çalışma Saatleri -->
                     <div class="mt-3">
                         <h6 class="mb-2">Çalışma Saatleri</h6>
                         <small class="text-light">
                             <i class="fas fa-clock me-1"></i>
-                            7/24 Hizmet Veriyoruz
+                            Pazartesi - Cuma: 09:00 - 18:00
                         </small>
                     </div>
                 </div>
@@ -131,7 +131,7 @@
             
             <hr class="my-4" style="border-color: rgba(255,255,255,0.2);">
             
-            <!-- Bottom Footer -->
+            <!-- Alt Footer -->
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <p class="mb-0 small">
@@ -143,7 +143,7 @@
                     <div class="small">
                         <a href="gizlilik-politikasi" class="me-3">Gizlilik Politikası</a>
                         <a href="kullanim-kosullari" class="me-3">Kullanım Koşulları</a>
-                        <a href="sitemap.xml" target="_blank">Site Haritası</a>
+                        <a href="site-haritasi.xml" target="_blank">Site Haritası</a>
                     </div>
                 </div>
             </div>
@@ -153,9 +153,9 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- Custom JavaScript -->
+    <!-- Özel JavaScript -->
     <script>
-        // Smooth scrolling for anchor links
+        // Anchor linkler için yumuşak kaydırma
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -169,7 +169,7 @@
             });
         });
         
-        // Navbar background change on scroll
+        // Kaydırma sırasında navbar arka plan değişimi
         window.addEventListener('scroll', function() {
             const navbar = document.querySelector('.navbar');
             if (window.scrollY > 50) {
@@ -181,7 +181,7 @@
             }
         });
         
-        // Form validation and submission
+        // Form doğrulama ve gönderimi
         document.addEventListener('DOMContentLoaded', function() {
             const forms = document.querySelectorAll('.needs-validation');
             
@@ -196,7 +196,7 @@
             });
         });
         
-        // Lazy loading for images
+        // Resimler için lazy loading
         if ('IntersectionObserver' in window) {
             const imageObserver = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
@@ -214,31 +214,31 @@
             });
         }
         
-        // Price calculator functionality
-        function calculatePrice() {
-            const fromDistrict = document.getElementById('from_district');
-            const toDistrict = document.getElementById('to_district');
-            const resultDiv = document.getElementById('price_result');
+        // Fiyat hesaplayıcı fonksiyonu
+        function fiyatHesapla() {
+            const baslangicIlce = document.getElementById('baslangic_ilce');
+            const hedefIlce = document.getElementById('hedef_ilce');
+            const sonucDiv = document.getElementById('fiyat_sonuc');
             
-            if (!fromDistrict || !toDistrict || !resultDiv) return;
+            if (!baslangicIlce || !hedefIlce || !sonucDiv) return;
             
-            if (fromDistrict.value && toDistrict.value) {
-                resultDiv.innerHTML = '<div class="text-center"><div class="loading"></div> Hesaplanıyor...</div>';
+            if (baslangicIlce.value && hedefIlce.value) {
+                sonucDiv.innerHTML = '<div class="text-center"><div class="loading"></div> Hesaplanıyor...</div>';
                 
-                fetch('api/calculate-price.php', {
+                fetch('api/fiyat-hesapla.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        from_district_id: fromDistrict.value,
-                        to_district_id: toDistrict.value
+                        baslangic_ilce_id: baslangicIlce.value,
+                        hedef_ilce_id: hedefIlce.value
                     })
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        resultDiv.innerHTML = `
+                        sonucDiv.innerHTML = `
                             <div class="alert alert-success">
                                 <h5><i class="fas fa-calculator me-2"></i>Tahmini Fiyat</h5>
                                 <p class="mb-1"><strong>${data.price} ₺</strong> ${data.estimated ? '(Tahmini)' : ''}</p>
@@ -248,7 +248,7 @@
                             </div>
                         `;
                     } else {
-                        resultDiv.innerHTML = `
+                        sonucDiv.innerHTML = `
                             <div class="alert alert-warning">
                                 Fiyat hesaplanamadı. Lütfen iletişime geçin.
                             </div>
@@ -256,7 +256,7 @@
                     }
                 })
                 .catch(error => {
-                    resultDiv.innerHTML = `
+                    sonucDiv.innerHTML = `
                         <div class="alert alert-danger">
                             Bir hata oluştu. Lütfen tekrar deneyin.
                         </div>
@@ -265,7 +265,7 @@
             }
         }
         
-        // Auto-hide alerts
+        // Uyarıları otomatik gizle
         document.addEventListener('DOMContentLoaded', function() {
             const alerts = document.querySelectorAll('.alert:not(.alert-permanent)');
             alerts.forEach(alert => {
@@ -280,19 +280,19 @@
             });
         });
         
-        // WhatsApp click tracking
+        // WhatsApp tıklama takibi
         document.addEventListener('DOMContentLoaded', function() {
             const whatsappLinks = document.querySelectorAll('a[href*="wa.me"]');
             whatsappLinks.forEach(link => {
                 link.addEventListener('click', function() {
-                    // Track WhatsApp clicks (you can integrate with Google Analytics here)
-                    console.log('WhatsApp link clicked');
+                    // WhatsApp tıklamalarını takip et (Google Analytics ile entegre edilebilir)
+                    console.log('WhatsApp linki tıklandı');
                 });
             });
         });
     </script>
     
-    <!-- Google Analytics (Add your tracking ID) -->
+    <!-- Google Analytics (Takip ID'nizi ekleyin) -->
     <!-- 
     <script async src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"></script>
     <script>

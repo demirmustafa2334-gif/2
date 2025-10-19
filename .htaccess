@@ -17,7 +17,7 @@ ServerSignature Off
 
 # Prevent access to config and admin directories from direct URL
 RedirectMatch 403 ^/config/.*$
-RedirectMatch 403 ^/admin/(?!login\.php|logout\.php|index\.php|.*\.(css|js|png|jpg|jpeg|gif|ico|svg)).*$
+RedirectMatch 403 ^/yonetim/(?!giris\.php|cikis\.php|index\.php|.*\.(css|js|png|jpg|jpeg|gif|ico|svg)).*$
 
 # Force HTTPS (uncomment in production)
 # RewriteCond %{HTTPS} off
@@ -28,25 +28,25 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)/$ /$1 [R=301,L]
 
 # SEO-friendly URLs for districts
-RewriteRule ^istanbul/([a-z0-9-]+)/?$ district.php?slug=$1 [L,QSA]
+RewriteRule ^istanbul/([a-z0-9-]+)/?$ ilce.php?slug=$1 [L,QSA]
 
 # SEO-friendly URLs for neighborhoods  
-RewriteRule ^mahalle/([a-z0-9-]+)/?$ neighborhood.php?slug=$1 [L,QSA]
+RewriteRule ^mahalle/([a-z0-9-]+)/?$ semt.php?slug=$1 [L,QSA]
 
 # SEO-friendly URLs for pages
-RewriteRule ^([a-z0-9-]+)/?$ page.php?slug=$1 [L,QSA]
+RewriteRule ^([a-z0-9-]+)/?$ sayfa.php?slug=$1 [L,QSA]
 
 # SEO-friendly URLs for blog posts
-RewriteRule ^blog/([a-z0-9-]+)/?$ blog-post.php?slug=$1 [L,QSA]
+RewriteRule ^blog/([a-z0-9-]+)/?$ blog-yazisi.php?slug=$1 [L,QSA]
 
 # Price calculator
-RewriteRule ^fiyat-hesapla/?$ price-calculator.php [L,QSA]
+RewriteRule ^fiyat-hesapla/?$ fiyat-hesaplayici.php [L,QSA]
 
 # Contact form handler
-RewriteRule ^iletisim-gonder/?$ contact-handler.php [L,QSA]
+RewriteRule ^iletisim-gonder/?$ iletisim-isleyici.php [L,QSA]
 
 # Sitemap
-RewriteRule ^sitemap\.xml$ sitemap.php [L]
+RewriteRule ^sitemap\.xml$ site-haritasi.php [L]
 
 # Robots.txt
 RewriteRule ^robots\.txt$ robots.php [L]
