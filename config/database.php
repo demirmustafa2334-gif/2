@@ -1,12 +1,12 @@
 <?php
 /**
  * Database Configuration
- * Istanbul Moving Company - Custom PHP Script
+ * Yereltanitim.com - Turkey Tourism Website
  */
 
 class Database {
     private $host = 'localhost';
-    private $db_name = 'istanbul_nakliyat';
+    private $db_name = 'turkey_tourism';
     private $username = 'root';
     private $password = '';
     private $charset = 'utf8mb4';
@@ -25,7 +25,7 @@ class Database {
             
             $this->conn = new PDO($dsn, $this->username, $this->password, $options);
         } catch(PDOException $exception) {
-            echo "Connection error: " . $exception->getMessage();
+            echo "Bağlantı hatası: " . $exception->getMessage();
         }
         
         return $this->conn;

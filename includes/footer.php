@@ -1,16 +1,16 @@
     <!-- Footer -->
-    <footer class="footer py-5">
+    <footer class="footer bg-dark text-light py-5">
         <div class="container">
             <div class="row g-4">
-                <!-- Şirket Bilgileri -->
+                <!-- Site Bilgileri -->
                 <div class="col-lg-3 col-md-6">
                     <h5 class="mb-3">
                         <i class="fas fa-map-marked-alt me-2"></i>
-                        Yerel Tanıtım
+                        Yereltanitim.com
                     </h5>
                     <p class="mb-3">
-                        İstanbul'un en kapsamlı yerel tanıtım platformu olarak, 
-                        şehrimizin her köşesini tanıtmak için buradayız.
+                        Türkiye'nin en kapsamlı turizm rehberi. 81 il, binlerce ilçe, 
+                        eşsiz lezzetler ve kültürel zenginlikler.
                     </p>
                     <div class="social-links">
                         <?php if (get_setting('facebook_url')): ?>
@@ -28,6 +28,11 @@
                                 <i class="fab fa-twitter fa-lg"></i>
                             </a>
                         <?php endif; ?>
+                        <?php if (get_setting('youtube_url')): ?>
+                            <a href="<?php echo get_setting('youtube_url'); ?>" target="_blank" class="me-3">
+                                <i class="fab fa-youtube fa-lg"></i>
+                            </a>
+                        <?php endif; ?>
                     </div>
                 </div>
                 
@@ -36,41 +41,42 @@
                     <h6 class="mb-3">Hızlı Linkler</h6>
                     <ul class="list-unstyled">
                         <li class="mb-2">
-                            <a href="<?php echo SITE_URL; ?>">Ana Sayfa</a>
+                            <a href="<?php echo SITE_URL; ?>" class="text-light text-decoration-none">Ana Sayfa</a>
                         </li>
                         <li class="mb-2">
-                            <a href="hizmetlerimiz">Hizmetlerimiz</a>
+                            <a href="sehirler.php" class="text-light text-decoration-none">Şehirler</a>
                         </li>
                         <li class="mb-2">
-                            <a href="bolgelerimiz">Bölgelerimiz</a>
+                            <a href="blog.php" class="text-light text-decoration-none">Blog</a>
                         </li>
                         <li class="mb-2">
-                            <a href="yorumlar">Kullanıcı Yorumları</a>
+                            <a href="hakkimizda.php" class="text-light text-decoration-none">Hakkımızda</a>
                         </li>
                         <li class="mb-2">
-                            <a href="blog">Blog</a>
+                            <a href="iletisim.php" class="text-light text-decoration-none">İletişim</a>
                         </li>
                         <li class="mb-2">
-                            <a href="iletisim">İletişim</a>
+                            <a href="sitemap.xml" class="text-light text-decoration-none">Site Haritası</a>
                         </li>
                     </ul>
                 </div>
                 
-                <!-- İlçeler -->
+                <!-- Popüler Şehirler -->
                 <div class="col-lg-3 col-md-6">
-                    <h6 class="mb-3">Tanıttığımız İlçeler</h6>
+                    <h6 class="mb-3">Popüler Şehirler</h6>
                     <div class="row">
                         <?php 
-                        $footerDistricts = new District();
-                        $districts = $footerDistricts->findAll('is_active = 1', 'name ASC', 12);
-                        $halfCount = ceil(count($districts) / 2);
+                        $footerCities = new City();
+                        $popularFooterCities = $footerCities->getPopularCities(12);
+                        $halfCount = ceil(count($popularFooterCities) / 2);
                         ?>
                         <div class="col-6">
                             <ul class="list-unstyled">
-                                <?php for ($i = 0; $i < $halfCount && $i < count($districts); $i++): ?>
+                                <?php for ($i = 0; $i < $halfCount && $i < count($popularFooterCities); $i++): ?>
                                     <li class="mb-1">
-                                        <a href="istanbul/<?php echo $districts[$i]['slug']; ?>" class="small">
-                                            <?php echo htmlspecialchars($districts[$i]['name']); ?>
+                                        <a href="sehir/<?php echo $popularFooterCities[$i]['slug']; ?>" 
+                                           class="text-light text-decoration-none small">
+                                            <?php echo htmlspecialchars($popularFooterCities[$i]['name']); ?>
                                         </a>
                                     </li>
                                 <?php endfor; ?>
@@ -78,10 +84,11 @@
                         </div>
                         <div class="col-6">
                             <ul class="list-unstyled">
-                                <?php for ($i = $halfCount; $i < count($districts); $i++): ?>
+                                <?php for ($i = $halfCount; $i < count($popularFooterCities); $i++): ?>
                                     <li class="mb-1">
-                                        <a href="istanbul/<?php echo $districts[$i]['slug']; ?>" class="small">
-                                            <?php echo htmlspecialchars($districts[$i]['name']); ?>
+                                        <a href="sehir/<?php echo $popularFooterCities[$i]['slug']; ?>" 
+                                           class="text-light text-decoration-none small">
+                                            <?php echo htmlspecialchars($popularFooterCities[$i]['name']); ?>
                                         </a>
                                     </li>
                                 <?php endfor; ?>
@@ -90,40 +97,51 @@
                     </div>
                 </div>
                 
-                <!-- İletişim Bilgileri -->
+                <!-- Tüm Türkiye Şehirleri (SEO için) -->
                 <div class="col-lg-4 col-md-6">
-                    <h6 class="mb-3">İletişim Bilgileri</h6>
-                    <ul class="list-unstyled">
-                        <li class="mb-2">
-                            <i class="fas fa-map-marker-alt me-2"></i>
-                            <?php echo get_setting('company_address'); ?>
-                        </li>
-                        <li class="mb-2">
-                            <i class="fas fa-phone me-2"></i>
-                            <a href="tel:<?php echo get_setting('contact_phone'); ?>">
-                                <?php echo get_setting('contact_phone'); ?>
-                            </a>
-                        </li>
-                        <li class="mb-2">
-                            <i class="fab fa-whatsapp me-2"></i>
-                            <a href="https://wa.me/<?php echo str_replace(['+', ' ', '(', ')'], '', get_setting('whatsapp_number')); ?>" target="_blank">
-                                <?php echo get_setting('whatsapp_number'); ?>
-                            </a>
-                        </li>
-                        <li class="mb-2">
-                            <i class="fas fa-envelope me-2"></i>
-                            <a href="mailto:<?php echo get_setting('contact_email'); ?>">
-                                <?php echo get_setting('contact_email'); ?>
-                            </a>
-                        </li>
-                    </ul>
-                    
-                    <!-- Çalışma Saatleri -->
-                    <div class="mt-3">
-                        <h6 class="mb-2">Çalışma Saatleri</h6>
-                        <small class="text-light">
-                            <i class="fas fa-clock me-1"></i>
-                            Pazartesi - Cuma: 09:00 - 18:00
+                    <h6 class="mb-3">Türkiye Şehirleri</h6>
+                    <div class="cities-grid">
+                        <?php 
+                        $allTurkishCities = get_turkish_cities();
+                        $cityChunks = array_chunk($allTurkishCities, ceil(count($allTurkishCities) / 3), true);
+                        ?>
+                        <div class="row">
+                            <?php foreach ($cityChunks as $chunk): ?>
+                                <div class="col-4">
+                                    <ul class="list-unstyled">
+                                        <?php foreach ($chunk as $plateCode => $cityName): ?>
+                                            <li class="mb-1">
+                                                <a href="sehir/<?php echo generate_slug($cityName); ?>" 
+                                                   class="text-light text-decoration-none small opacity-75">
+                                                    <?php echo $cityName; ?>
+                                                </a>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <hr class="my-4" style="border-color: rgba(255,255,255,0.2);">
+            
+            <!-- SEO Keywords Footer -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="seo-keywords text-center">
+                        <small class="text-muted">
+                            <strong>Anahtar Kelimeler:</strong>
+                            Türkiye turizm rehberi, şehir rehberleri, yerel lezzetler, turistik yerler, 
+                            kültürel özellikler, gezi rehberi, tatil rehberi, İstanbul, Ankara, İzmir, 
+                            Antalya, Bursa, Adana, Gaziantep, Konya, Mersin, Diyarbakır, Kayseri, 
+                            Eskişehir, Samsun, Denizli, Şanlıurfa, Adapazarı, Malatya, Kahramanmaraş, 
+                            Erzurum, Van, Batman, Elazığ, İzmit, Manisa, Sivas, Gebze, Balıkesir, 
+                            Tarsus, Kütahya, Trabzon, Çorum, Çorlu, Adıyaman, Osmaniye, Kırıkkale, 
+                            Antakya, Aydın, İskenderun, Uşak, Aksaray, Afyon, Isparta, İnegöl, 
+                            Tekirdağ, Edirne, Darıca, Ordu, Karaman, Gölcük, Siirt, Körfez, Kızıltepe, 
+                            Düzce, Tokat, Bolu, Derince, Turhal, Bandırma, Ceyhan, Nazilli, Zonguldak
                         </small>
                     </div>
                 </div>
@@ -135,15 +153,15 @@
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <p class="mb-0 small">
-                        &copy; <?php echo date('Y'); ?> <?php echo get_setting('site_title'); ?>. 
+                        &copy; <?php echo date('Y'); ?> Yereltanitim.com. 
                         Tüm hakları saklıdır.
                     </p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <div class="small">
-                        <a href="gizlilik-politikasi" class="me-3">Gizlilik Politikası</a>
-                        <a href="kullanim-kosullari" class="me-3">Kullanım Koşulları</a>
-                        <a href="site-haritasi.xml" target="_blank">Site Haritası</a>
+                        <a href="gizlilik-politikasi.php" class="text-light text-decoration-none me-3">Gizlilik Politikası</a>
+                        <a href="kullanim-kosullari.php" class="text-light text-decoration-none me-3">Kullanım Koşulları</a>
+                        <a href="cerez-politikasi.php" class="text-light text-decoration-none">Çerez Politikası</a>
                     </div>
                 </div>
             </div>
@@ -155,7 +173,7 @@
     
     <!-- Özel JavaScript -->
     <script>
-        // Anchor linkler için yumuşak kaydırma
+        // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -169,11 +187,11 @@
             });
         });
         
-        // Kaydırma sırasında navbar arka plan değişimi
+        // Navbar background change on scroll
         window.addEventListener('scroll', function() {
             const navbar = document.querySelector('.navbar');
             if (window.scrollY > 50) {
-                navbar.style.background = 'rgba(44, 62, 80, 0.95)';
+                navbar.style.background = 'rgba(37, 99, 235, 0.95)';
                 navbar.style.backdropFilter = 'blur(10px)';
             } else {
                 navbar.style.background = 'linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%)';
@@ -181,7 +199,7 @@
             }
         });
         
-        // Form doğrulama ve gönderimi
+        // Form validation
         document.addEventListener('DOMContentLoaded', function() {
             const forms = document.querySelectorAll('.needs-validation');
             
@@ -196,7 +214,7 @@
             });
         });
         
-        // Resimler için lazy loading
+        // Lazy loading for images
         if ('IntersectionObserver' in window) {
             const imageObserver = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
@@ -214,58 +232,7 @@
             });
         }
         
-        // Fiyat hesaplayıcı fonksiyonu
-        function fiyatHesapla() {
-            const baslangicIlce = document.getElementById('baslangic_ilce');
-            const hedefIlce = document.getElementById('hedef_ilce');
-            const sonucDiv = document.getElementById('fiyat_sonuc');
-            
-            if (!baslangicIlce || !hedefIlce || !sonucDiv) return;
-            
-            if (baslangicIlce.value && hedefIlce.value) {
-                sonucDiv.innerHTML = '<div class="text-center"><div class="loading"></div> Hesaplanıyor...</div>';
-                
-                fetch('api/fiyat-hesapla.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        baslangic_ilce_id: baslangicIlce.value,
-                        hedef_ilce_id: hedefIlce.value
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        sonucDiv.innerHTML = `
-                            <div class="alert alert-success">
-                                <h5><i class="fas fa-calculator me-2"></i>Tahmini Fiyat</h5>
-                                <p class="mb-1"><strong>${data.price} ₺</strong> ${data.estimated ? '(Tahmini)' : ''}</p>
-                                <small class="text-muted">
-                                    ${data.from_district} → ${data.to_district}
-                                </small>
-                            </div>
-                        `;
-                    } else {
-                        sonucDiv.innerHTML = `
-                            <div class="alert alert-warning">
-                                Fiyat hesaplanamadı. Lütfen iletişime geçin.
-                            </div>
-                        `;
-                    }
-                })
-                .catch(error => {
-                    sonucDiv.innerHTML = `
-                        <div class="alert alert-danger">
-                            Bir hata oluştu. Lütfen tekrar deneyin.
-                        </div>
-                    `;
-                });
-            }
-        }
-        
-        // Uyarıları otomatik gizle
+        // Auto-hide alerts
         document.addEventListener('DOMContentLoaded', function() {
             const alerts = document.querySelectorAll('.alert:not(.alert-permanent)');
             alerts.forEach(alert => {
@@ -280,27 +247,53 @@
             });
         });
         
-        // WhatsApp tıklama takibi
+        // Search functionality
+        function performSearch(query) {
+            if (query.length < 2) return;
+            
+            fetch(`api/search.php?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Handle search results
+                    console.log('Search results:', data);
+                })
+                .catch(error => {
+                    console.error('Search error:', error);
+                });
+        }
+        
+        // Page view tracking
         document.addEventListener('DOMContentLoaded', function() {
-            const whatsappLinks = document.querySelectorAll('a[href*="wa.me"]');
-            whatsappLinks.forEach(link => {
+            // Track page view if analytics is enabled
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'page_view', {
+                    page_title: document.title,
+                    page_location: window.location.href
+                });
+            }
+        });
+        
+        // Click tracking for external links
+        document.addEventListener('DOMContentLoaded', function() {
+            const externalLinks = document.querySelectorAll('a[href^="http"]:not([href*="yereltanitim.com"])');
+            externalLinks.forEach(link => {
                 link.addEventListener('click', function() {
-                    // WhatsApp tıklamalarını takip et (Google Analytics ile entegre edilebilir)
-                    console.log('WhatsApp linki tıklandı');
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'click', {
+                            event_category: 'outbound',
+                            event_label: this.href
+                        });
+                    }
                 });
             });
         });
     </script>
     
-    <!-- Google Analytics (Takip ID'nizi ekleyin) -->
-    <!-- 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'GA_TRACKING_ID');
-    </script>
-    -->
+    <!-- Schema.org için sayfa özel structured data -->
+    <?php if (isset($structuredData)): ?>
+        <script type="application/ld+json">
+            <?php echo json_encode($structuredData, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
+        </script>
+    <?php endif; ?>
 </body>
 </html>

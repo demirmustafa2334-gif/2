@@ -1,33 +1,33 @@
 <?php
 /**
- * Yönetici Paneli Ana Sayfa
- * Yerel Tanıtım - Özel PHP Scripti
+ * Admin Dashboard
+ * Yereltanitim.com - Turkey Tourism Website
  */
 
 require_once '../config/config.php';
 require_admin_login();
 
-// Dashboard istatistiklerini al
+// Dashboard statistics
+$city = new City();
 $district = new District();
-$neighborhood = new Neighborhood();
-$review = new Review();
-$contactMessage = new ContactMessage();
 $blogPost = new BlogPost();
+$contactMessage = new ContactMessage();
 
 $stats = [
+    'cities' => $city->count('is_active = 1'),
     'districts' => $district->count('is_active = 1'),
-    'neighborhoods' => $neighborhood->count('is_active = 1'),
-    'reviews' => $review->count('is_approved = 1'),
-    'pending_reviews' => $review->count('is_approved = 0'),
+    'blog_posts' => $blogPost->count('is_published = 1'),
+    'draft_posts' => $blogPost->count('is_published = 0'),
     'unread_messages' => $contactMessage->getUnreadCount(),
-    'blog_posts' => $blogPost->count('is_published = 1')
+    'total_views' => 0 // You can implement view counting
 ];
 
 $recentMessages = $contactMessage->getAllMessages(5);
-$recentReviews = $review->findAll('', 'created_at DESC', 5);
-?>
+$recentPosts = $blogPost->findAll('', 'created_at DESC', 5);
+$popularCities = $city->getPopularCities(5);
 
-<?php include 'includes/header.php'; ?>
+include 'includes/header.php';
+?>
 
 <div class="container-fluid">
     <div class="row">
@@ -40,7 +40,7 @@ $recentReviews = $review->findAll('', 'created_at DESC', 5);
                 </h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
-                        <span class="badge bg-primary">
+                        <span class="badge bg-primary fs-6">
                             <i class="fas fa-clock me-1"></i>
                             <?php echo date('d.m.Y H:i'); ?>
                         </span>
@@ -48,90 +48,105 @@ $recentReviews = $review->findAll('', 'created_at DESC', 5);
                 </div>
             </div>
             
-            <!-- İstatistik Kartları -->
+            <!-- Statistics Cards -->
             <div class="row mb-4">
-                <div class="col-md-3 mb-3">
-                    <div class="card bg-primary text-white">
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 py-2">
                         <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h5 class="card-title">İlçeler</h5>
-                                    <h2 class="mb-0"><?php echo $stats['districts']; ?></h2>
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                        Şehirler
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                        <?php echo $stats['cities']; ?>
+                                    </div>
                                 </div>
-                                <div class="align-self-center">
-                                    <i class="fas fa-map-marker-alt fa-2x"></i>
+                                <div class="col-auto">
+                                    <i class="fas fa-city fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
                         <div class="card-footer">
-                            <a href="ilceler.php" class="text-white text-decoration-none">
+                            <a href="sehirler.php" class="text-primary text-decoration-none">
                                 <small>Detayları Görüntüle <i class="fas fa-arrow-right"></i></small>
                             </a>
                         </div>
                     </div>
                 </div>
                 
-                <div class="col-md-3 mb-3">
-                    <div class="card bg-success text-white">
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-success shadow h-100 py-2">
                         <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h5 class="card-title">Mahalleler</h5>
-                                    <h2 class="mb-0"><?php echo $stats['neighborhoods']; ?></h2>
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                        İlçeler
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                        <?php echo $stats['districts']; ?>
+                                    </div>
                                 </div>
-                                <div class="align-self-center">
-                                    <i class="fas fa-location-dot fa-2x"></i>
+                                <div class="col-auto">
+                                    <i class="fas fa-map-marker-alt fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
                         <div class="card-footer">
-                            <a href="mahalleler.php" class="text-white text-decoration-none">
+                            <a href="ilceler.php" class="text-success text-decoration-none">
                                 <small>Detayları Görüntüle <i class="fas fa-arrow-right"></i></small>
                             </a>
                         </div>
                     </div>
                 </div>
                 
-                <div class="col-md-3 mb-3">
-                    <div class="card bg-info text-white">
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-info shadow h-100 py-2">
                         <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h5 class="card-title">Yorumlar</h5>
-                                    <h2 class="mb-0"><?php echo $stats['reviews']; ?></h2>
-                                    <?php if ($stats['pending_reviews'] > 0): ?>
-                                        <small class="badge bg-warning"><?php echo $stats['pending_reviews']; ?> beklemede</small>
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                        Blog Yazıları
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                        <?php echo $stats['blog_posts']; ?>
+                                    </div>
+                                    <?php if ($stats['draft_posts'] > 0): ?>
+                                        <small class="text-muted"><?php echo $stats['draft_posts']; ?> taslak</small>
                                     <?php endif; ?>
                                 </div>
-                                <div class="align-self-center">
-                                    <i class="fas fa-star fa-2x"></i>
+                                <div class="col-auto">
+                                    <i class="fas fa-newspaper fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
                         <div class="card-footer">
-                            <a href="yorumlar.php" class="text-white text-decoration-none">
+                            <a href="blog.php" class="text-info text-decoration-none">
                                 <small>Detayları Görüntüle <i class="fas fa-arrow-right"></i></small>
                             </a>
                         </div>
                     </div>
                 </div>
                 
-                <div class="col-md-3 mb-3">
-                    <div class="card bg-warning text-dark">
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-warning shadow h-100 py-2">
                         <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h5 class="card-title">Mesajlar</h5>
-                                    <h2 class="mb-0"><?php echo $stats['unread_messages']; ?></h2>
-                                    <small>okunmamış</small>
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                        Okunmamış Mesajlar
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                        <?php echo $stats['unread_messages']; ?>
+                                    </div>
                                 </div>
-                                <div class="align-self-center">
-                                    <i class="fas fa-envelope fa-2x"></i>
+                                <div class="col-auto">
+                                    <i class="fas fa-envelope fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
                         <div class="card-footer">
-                            <a href="mesajlar.php" class="text-dark text-decoration-none">
+                            <a href="mesajlar.php" class="text-warning text-decoration-none">
                                 <small>Detayları Görüntüle <i class="fas fa-arrow-right"></i></small>
                             </a>
                         </div>
@@ -139,14 +154,15 @@ $recentReviews = $review->findAll('', 'created_at DESC', 5);
                 </div>
             </div>
             
-            <!-- Son Aktiviteler -->
+            <!-- Content Row -->
             <div class="row">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">
+                <!-- Recent Messages -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">
                                 <i class="fas fa-envelope me-2"></i>Son Mesajlar
-                            </h5>
+                            </h6>
                         </div>
                         <div class="card-body">
                             <?php if (empty($recentMessages)): ?>
@@ -156,9 +172,12 @@ $recentReviews = $review->findAll('', 'created_at DESC', 5);
                                     <div class="d-flex justify-content-between align-items-center border-bottom py-2">
                                         <div>
                                             <strong><?php echo htmlspecialchars($message['name']); ?></strong>
+                                            <?php if ($message['subject']): ?>
+                                                <br><small class="text-primary"><?php echo htmlspecialchars($message['subject']); ?></small>
+                                            <?php endif; ?>
                                             <br>
                                             <small class="text-muted">
-                                                <?php echo substr(htmlspecialchars($message['message']), 0, 50) . '...'; ?>
+                                                <?php echo truncate_text($message['message'], 60); ?>
                                             </small>
                                         </div>
                                         <div class="text-end">
@@ -167,7 +186,7 @@ $recentReviews = $review->findAll('', 'created_at DESC', 5);
                                             <?php endif; ?>
                                             <br>
                                             <small class="text-muted">
-                                                <?php echo date('d.m.Y', strtotime($message['created_at'])); ?>
+                                                <?php echo format_date($message['created_at']); ?>
                                             </small>
                                         </div>
                                     </div>
@@ -182,46 +201,43 @@ $recentReviews = $review->findAll('', 'created_at DESC', 5);
                     </div>
                 </div>
                 
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">
-                                <i class="fas fa-star me-2"></i>Son Yorumlar
-                            </h5>
+                <!-- Recent Posts -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">
+                                <i class="fas fa-newspaper me-2"></i>Son Blog Yazıları
+                            </h6>
                         </div>
                         <div class="card-body">
-                            <?php if (empty($recentReviews)): ?>
-                                <p class="text-muted">Henüz yorum bulunmuyor.</p>
+                            <?php if (empty($recentPosts)): ?>
+                                <p class="text-muted">Henüz blog yazısı bulunmuyor.</p>
                             <?php else: ?>
-                                <?php foreach ($recentReviews as $review): ?>
+                                <?php foreach ($recentPosts as $post): ?>
                                     <div class="d-flex justify-content-between align-items-center border-bottom py-2">
                                         <div>
-                                            <strong><?php echo htmlspecialchars($review['customer_name']); ?></strong>
-                                            <div class="text-warning">
-                                                <?php for ($i = 1; $i <= 5; $i++): ?>
-                                                    <i class="fas fa-star<?php echo $i <= $review['rating'] ? '' : '-o'; ?>"></i>
-                                                <?php endfor; ?>
-                                            </div>
+                                            <strong><?php echo htmlspecialchars($post['title']); ?></strong>
+                                            <br>
                                             <small class="text-muted">
-                                                <?php echo substr(htmlspecialchars($review['review_text']), 0, 50) . '...'; ?>
+                                                <?php echo truncate_text($post['excerpt'], 60); ?>
                                             </small>
                                         </div>
                                         <div class="text-end">
-                                            <?php if (!$review['is_approved']): ?>
-                                                <span class="badge bg-warning">Beklemede</span>
+                                            <?php if (!$post['is_published']): ?>
+                                                <span class="badge bg-secondary">Taslak</span>
                                             <?php else: ?>
-                                                <span class="badge bg-success">Onaylı</span>
+                                                <span class="badge bg-success">Yayında</span>
                                             <?php endif; ?>
                                             <br>
                                             <small class="text-muted">
-                                                <?php echo date('d.m.Y', strtotime($review['created_at'])); ?>
+                                                <?php echo format_date($post['created_at']); ?>
                                             </small>
                                         </div>
                                     </div>
                                 <?php endforeach; ?>
                                 <div class="text-center mt-3">
-                                    <a href="yorumlar.php" class="btn btn-outline-primary btn-sm">
-                                        Tüm Yorumları Görüntüle
+                                    <a href="blog.php" class="btn btn-outline-primary btn-sm">
+                                        Tüm Yazıları Görüntüle
                                     </a>
                                 </div>
                             <?php endif; ?>
@@ -229,8 +245,109 @@ $recentReviews = $review->findAll('', 'created_at DESC', 5);
                     </div>
                 </div>
             </div>
+            
+            <!-- Popular Cities -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">
+                                <i class="fas fa-star me-2"></i>Popüler Şehirler
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <?php foreach ($popularCities as $popularCity): ?>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card border-left-primary">
+                                            <div class="card-body py-3">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="me-3">
+                                                        <i class="fas fa-city fa-2x text-primary"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="mb-1"><?php echo htmlspecialchars($popularCity['name']); ?></h6>
+                                                        <small class="text-muted"><?php echo htmlspecialchars($popularCity['region']); ?> Bölgesi</small>
+                                                        <?php if (isset($popularCity['blog_count']) && $popularCity['blog_count'] > 0): ?>
+                                                            <br><small class="text-info"><?php echo $popularCity['blog_count']; ?> yazı</small>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">
+                                <i class="fas fa-bolt me-2"></i>Hızlı İşlemler
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <a href="sehir-ekle.php" class="btn btn-primary btn-block">
+                                        <i class="fas fa-plus me-2"></i>Yeni Şehir Ekle
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="blog-ekle.php" class="btn btn-success btn-block">
+                                        <i class="fas fa-pen me-2"></i>Yeni Yazı Ekle
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="ai-yazi-olustur.php" class="btn btn-info btn-block">
+                                        <i class="fas fa-robot me-2"></i>AI ile Yazı Oluştur
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="ayarlar.php" class="btn btn-secondary btn-block">
+                                        <i class="fas fa-cog me-2"></i>Site Ayarları
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 </div>
+
+<style>
+.border-left-primary {
+    border-left: 0.25rem solid #4e73df !important;
+}
+
+.border-left-success {
+    border-left: 0.25rem solid #1cc88a !important;
+}
+
+.border-left-info {
+    border-left: 0.25rem solid #36b9cc !important;
+}
+
+.border-left-warning {
+    border-left: 0.25rem solid #f6c23e !important;
+}
+
+.text-xs {
+    font-size: 0.7rem;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+</style>
 
 <?php include 'includes/footer.php'; ?>

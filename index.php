@@ -1,257 +1,164 @@
 <?php
 /**
- * Homepage - Istanbul Moving Company
- * Custom PHP Script
+ * Ana Sayfa - Yereltanitim.com
+ * Turkey Tourism Website
  */
 
 require_once 'config/config.php';
 
-// Get homepage data
-$district = new District();
-$review = new Review();
+// Ana sayfa verilerini al
+$city = new City();
 $blogPost = new BlogPost();
+$district = new District();
 
-$featuredDistricts = $district->findAll('is_active = 1', 'name ASC', 8);
-$featuredReviews = $review->getFeaturedReviews(6);
-$recentBlogPosts = $blogPost->getRecentPosts(3);
-$reviewStats = $review->getAverageRating();
+$popularCities = $city->getPopularCities(8);
+$featuredPosts = $blogPost->getFeaturedPosts(6);
+$recentPosts = $blogPost->getRecentPosts(4);
+$popularDistricts = $district->getPopularDistricts(6);
 
-// SEO Meta Data
+// SEO Meta Verileri
 $pageTitle = get_setting('site_title');
 $pageDescription = get_setting('site_description');
-$pageKeywords = 'İstanbul nakliyat, evden eve taşımacılık, nakliye firması, güvenilir nakliyat';
+$pageKeywords = 'Türkiye turizm, şehir rehberi, yerel lezzetler, turistik yerler, kültür, gezi rehberi';
 
 include 'includes/header.php';
 ?>
 
-<!-- Hero Section -->
-<section class="hero-section bg-primary text-white py-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <h1 class="display-4 fw-bold mb-4">
-                    İstanbul'un En Güvenilir Nakliyat Firması
-                </h1>
-                <p class="lead mb-4">
-                    Profesyonel ekibimiz ve modern araçlarımızla evden eve taşımacılık hizmetlerinde 
-                    güvenin adresi. Sigortalı ve hızlı nakliyat çözümleri.
-                </p>
-                <div class="d-flex flex-wrap gap-3">
-                    <a href="fiyat-hesapla" class="btn btn-warning btn-lg">
-                        <i class="fas fa-calculator me-2"></i>
-                        Ücretsiz Fiyat Teklifi
-                    </a>
-                    <a href="tel:<?php echo get_setting('contact_phone'); ?>" class="btn btn-outline-light btn-lg">
-                        <i class="fas fa-phone me-2"></i>
-                        Hemen Ara
-                    </a>
+<!-- Ana Banner Bölümü -->
+<section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <div class="container">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-10">
+                    <h1 class="hero-title">Türkiye'nin En Kapsamlı Turizm Rehberi</h1>
+                    <p class="hero-subtitle">
+                        81 il, binlerce ilçe, eşsiz lezzetler ve kültürel zenginlikler. 
+                        Türkiye'yi keşfetmenin en güzel yolu burada başlıyor.
+                    </p>
+                    <div class="hero-search">
+                        <form action="arama.php" method="GET" class="search-form">
+                            <div class="input-group">
+                                <input type="text" name="q" class="form-control" placeholder="Şehir, ilçe veya turistik yer arayın...">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-search"></i> Ara
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-6 text-center">
-                <img src="assets/images/hero-truck.png" alt="İstanbul Nakliyat" class="img-fluid" style="max-height: 400px;">
             </div>
         </div>
     </div>
 </section>
 
-<!-- Services Section -->
-<section class="services-section py-5">
+<!-- Popüler Şehirler -->
+<section class="popular-cities py-5">
     <div class="container">
         <div class="row">
-            <div class="col-lg-12 text-center mb-5">
-                <h2 class="section-title">Hizmetlerimiz</h2>
-                <p class="text-muted">Tüm nakliyat ihtiyaçlarınız için profesyonel çözümler</p>
+            <div class="col-12 text-center mb-5">
+                <h2 class="section-title">Popüler Şehirler</h2>
+                <p class="section-subtitle">En çok ziyaret edilen ve merak edilen şehirlerimiz</p>
             </div>
         </div>
         <div class="row g-4">
-            <div class="col-md-4">
-                <div class="service-card text-center p-4">
-                    <div class="service-icon mb-3">
-                        <i class="fas fa-home fa-3x text-primary"></i>
-                    </div>
-                    <h4>Evden Eve Nakliyat</h4>
-                    <p class="text-muted">
-                        Eşyalarınızı güvenle paketleyip yeni evinize taşıyoruz. 
-                        Profesyonel ambalajlama ve sigortalı taşımacılık.
-                    </p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="service-card text-center p-4">
-                    <div class="service-icon mb-3">
-                        <i class="fas fa-building fa-3x text-success"></i>
-                    </div>
-                    <h4>Ofis Taşımacılığı</h4>
-                    <p class="text-muted">
-                        İş yerinizi en kısa sürede ve minimum kesinti ile 
-                        yeni adresinize taşıyoruz.
-                    </p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="service-card text-center p-4">
-                    <div class="service-icon mb-3">
-                        <i class="fas fa-warehouse fa-3x text-warning"></i>
-                    </div>
-                    <h4>Eşya Depolama</h4>
-                    <p class="text-muted">
-                        Güvenli depolama alanlarımızda eşyalarınızı 
-                        istediğiniz süre boyunca saklayabilirsiniz.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Districts Section -->
-<section class="districts-section py-5 bg-light">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center mb-5">
-                <h2 class="section-title">Hizmet Verdiğimiz İlçeler</h2>
-                <p class="text-muted">İstanbul'un tüm ilçelerinde profesyonel nakliyat hizmeti</p>
-            </div>
-        </div>
-        <div class="row g-3">
-            <?php foreach ($featuredDistricts as $district): ?>
-                <div class="col-md-3 col-sm-6">
-                    <a href="istanbul/<?php echo $district['slug']; ?>" class="district-card d-block text-decoration-none">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-body text-center">
-                                <i class="fas fa-map-marker-alt text-primary mb-2"></i>
-                                <h6 class="card-title mb-0"><?php echo htmlspecialchars($district['name']); ?> Nakliyat</h6>
+            <?php foreach ($popularCities as $city): ?>
+                <div class="col-lg-3 col-md-6">
+                    <div class="city-card">
+                        <div class="city-image">
+                            <?php if ($city['featured_image']): ?>
+                                <img src="<?php echo UPLOAD_URL . $city['featured_image']; ?>" alt="<?php echo htmlspecialchars($city['name']); ?>">
+                            <?php else: ?>
+                                <div class="city-placeholder">
+                                    <i class="fas fa-city"></i>
+                                </div>
+                            <?php endif; ?>
+                            <div class="city-overlay">
+                                <div class="city-info">
+                                    <h4><?php echo htmlspecialchars($city['name']); ?></h4>
+                                    <p class="city-region"><?php echo htmlspecialchars($city['region']); ?> Bölgesi</p>
+                                    <div class="city-stats">
+                                        <span class="stat-item">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <?php echo $city['district_count'] ?? 0; ?> İlçe
+                                        </span>
+                                        <?php if (isset($city['blog_count']) && $city['blog_count'] > 0): ?>
+                                            <span class="stat-item">
+                                                <i class="fas fa-newspaper"></i>
+                                                <?php echo $city['blog_count']; ?> Yazı
+                                            </span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </a>
+                        <div class="city-content">
+                            <h5><?php echo htmlspecialchars($city['name']); ?></h5>
+                            <p><?php echo truncate_text($city['description'], 100); ?></p>
+                            <a href="sehir/<?php echo $city['slug']; ?>" class="btn btn-outline-primary btn-sm">
+                                Keşfet <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             <?php endforeach; ?>
         </div>
         <div class="text-center mt-4">
-            <a href="hizmetlerimiz" class="btn btn-primary">
-                Tüm İlçeleri Görüntüle
+            <a href="sehirler.php" class="btn btn-primary btn-lg">
+                Tüm Şehirleri Görüntüle
             </a>
         </div>
     </div>
 </section>
 
-<!-- Reviews Section -->
-<?php if (!empty($featuredReviews)): ?>
-<section class="reviews-section py-5">
+<!-- Öne Çıkan Yazılar -->
+<?php if (!empty($featuredPosts)): ?>
+<section class="featured-posts py-5 bg-light">
     <div class="container">
         <div class="row">
-            <div class="col-lg-12 text-center mb-5">
-                <h2 class="section-title">Müşteri Yorumları</h2>
-                <div class="review-stats mb-3">
-                    <div class="rating-display">
-                        <?php for ($i = 1; $i <= 5; $i++): ?>
-                            <i class="fas fa-star text-warning"></i>
-                        <?php endfor; ?>
-                        <span class="ms-2">
-                            <strong><?php echo number_format($reviewStats['avg_rating'], 1); ?></strong>
-                            (<?php echo $reviewStats['total_reviews']; ?> değerlendirme)
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div id="reviewsCarousel" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        <?php 
-                        $chunks = array_chunk($featuredReviews, 3);
-                        foreach ($chunks as $index => $chunk): 
-                        ?>
-                            <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">
-                                <div class="row g-4">
-                                    <?php foreach ($chunk as $review): ?>
-                                        <div class="col-md-4">
-                                            <div class="review-card p-4">
-                                                <div class="review-rating mb-2">
-                                                    <?php for ($i = 1; $i <= 5; $i++): ?>
-                                                        <i class="fas fa-star <?php echo $i <= $review['rating'] ? 'text-warning' : 'text-muted'; ?>"></i>
-                                                    <?php endfor; ?>
-                                                </div>
-                                                <p class="review-text">
-                                                    "<?php echo htmlspecialchars($review['review_text']); ?>"
-                                                </p>
-                                                <div class="review-author">
-                                                    <strong><?php echo htmlspecialchars($review['customer_name']); ?></strong>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                    <?php if (count($chunks) > 1): ?>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon"></span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="next">
-                            <span class="carousel-control-next-icon"></span>
-                        </button>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<?php endif; ?>
-
-<!-- CTA Section -->
-<section class="cta-section bg-primary text-white py-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-8">
-                <h3 class="mb-2">Hemen Ücretsiz Fiyat Teklifi Alın!</h3>
-                <p class="mb-0">Profesyonel nakliyat hizmetlerimiz için şimdi iletişime geçin.</p>
-            </div>
-            <div class="col-lg-4 text-lg-end">
-                <a href="iletisim" class="btn btn-warning btn-lg">
-                    <i class="fas fa-envelope me-2"></i>
-                    İletişime Geç
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Blog Section -->
-<?php if (!empty($recentBlogPosts)): ?>
-<section class="blog-section py-5 bg-light">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center mb-5">
-                <h2 class="section-title">Blog</h2>
-                <p class="text-muted">Nakliyat ile ilgili faydalı bilgiler</p>
+            <div class="col-12 text-center mb-5">
+                <h2 class="section-title">Öne Çıkan Yazılar</h2>
+                <p class="section-subtitle">En popüler ve güncel turizm rehberlerimiz</p>
             </div>
         </div>
         <div class="row g-4">
-            <?php foreach ($recentBlogPosts as $post): ?>
-                <div class="col-md-4">
+            <?php foreach ($featuredPosts as $post): ?>
+                <div class="col-lg-4 col-md-6">
                     <article class="blog-card">
-                        <div class="card h-100 border-0 shadow-sm">
+                        <div class="blog-image">
                             <?php if ($post['featured_image']): ?>
-                                <img src="<?php echo UPLOAD_URL . $post['featured_image']; ?>" 
-                                     class="card-img-top" alt="<?php echo htmlspecialchars($post['title']); ?>">
+                                <img src="<?php echo UPLOAD_URL . $post['featured_image']; ?>" alt="<?php echo htmlspecialchars($post['title']); ?>">
+                            <?php else: ?>
+                                <div class="blog-placeholder">
+                                    <i class="fas fa-image"></i>
+                                </div>
                             <?php endif; ?>
-                            <div class="card-body">
-                                <h5 class="card-title">
-                                    <a href="blog/<?php echo $post['slug']; ?>" class="text-decoration-none">
-                                        <?php echo htmlspecialchars($post['title']); ?>
-                                    </a>
-                                </h5>
-                                <p class="card-text text-muted">
-                                    <?php echo htmlspecialchars($post['excerpt']); ?>
-                                </p>
-                                <small class="text-muted">
-                                    <i class="fas fa-calendar me-1"></i>
-                                    <?php echo date('d.m.Y', strtotime($post['created_at'])); ?>
-                                </small>
+                            <div class="blog-category">
+                                <span class="badge bg-primary">Öne Çıkan</span>
                             </div>
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-meta">
+                                <span class="blog-date">
+                                    <i class="fas fa-calendar"></i>
+                                    <?php echo format_date($post['created_at']); ?>
+                                </span>
+                                <span class="blog-views">
+                                    <i class="fas fa-eye"></i>
+                                    <?php echo $post['view_count']; ?>
+                                </span>
+                            </div>
+                            <h5 class="blog-title">
+                                <a href="blog/<?php echo $post['slug']; ?>">
+                                    <?php echo htmlspecialchars($post['title']); ?>
+                                </a>
+                            </h5>
+                            <p class="blog-excerpt">
+                                <?php echo htmlspecialchars($post['excerpt']); ?>
+                            </p>
+                            <a href="blog/<?php echo $post['slug']; ?>" class="btn btn-outline-primary btn-sm">
+                                Devamını Oku
+                            </a>
                         </div>
                     </article>
                 </div>
@@ -261,12 +168,135 @@ include 'includes/header.php';
 </section>
 <?php endif; ?>
 
-<!-- WhatsApp Float Button -->
-<div class="whatsapp-float">
-    <a href="https://wa.me/<?php echo str_replace(['+', ' ', '(', ')'], '', get_setting('whatsapp_number')); ?>" 
-       target="_blank" class="btn btn-success rounded-circle p-3">
-        <i class="fab fa-whatsapp fa-2x"></i>
-    </a>
-</div>
+<!-- Popüler İlçeler -->
+<?php if (!empty($popularDistricts)): ?>
+<section class="popular-districts py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="section-title">Popüler İlçeler</h2>
+                <p class="section-subtitle">En çok merak edilen ilçeler ve bölgeler</p>
+            </div>
+        </div>
+        <div class="row g-4">
+            <?php foreach ($popularDistricts as $district): ?>
+                <div class="col-lg-4 col-md-6">
+                    <div class="district-card">
+                        <div class="district-content">
+                            <div class="district-header">
+                                <h5><?php echo htmlspecialchars($district['name']); ?></h5>
+                                <span class="district-city"><?php echo htmlspecialchars($district['city_name']); ?></span>
+                            </div>
+                            <p class="district-description">
+                                <?php echo truncate_text($district['description'], 120); ?>
+                            </p>
+                            <?php if (!empty($district['specialties'])): ?>
+                                <div class="district-specialties">
+                                    <small class="text-muted">
+                                        <i class="fas fa-star"></i>
+                                        <?php echo truncate_text($district['specialties'], 80); ?>
+                                    </small>
+                                </div>
+                            <?php endif; ?>
+                            <div class="district-footer">
+                                <a href="ilce/<?php echo $district['slug']; ?>" class="btn btn-primary btn-sm">
+                                    Keşfet
+                                </a>
+                                <?php if (isset($district['blog_count']) && $district['blog_count'] > 0): ?>
+                                    <span class="blog-count">
+                                        <i class="fas fa-newspaper"></i>
+                                        <?php echo $district['blog_count']; ?> yazı
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
+
+<!-- Son Yazılar -->
+<?php if (!empty($recentPosts)): ?>
+<section class="recent-posts py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="section-title">Son Yazılar</h2>
+                <p class="section-subtitle">En güncel turizm rehberleri ve öneriler</p>
+            </div>
+        </div>
+        <div class="row g-4">
+            <?php foreach ($recentPosts as $post): ?>
+                <div class="col-lg-6">
+                    <article class="recent-post-card">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <div class="recent-post-image">
+                                    <?php if ($post['featured_image']): ?>
+                                        <img src="<?php echo UPLOAD_URL . $post['featured_image']; ?>" alt="<?php echo htmlspecialchars($post['title']); ?>">
+                                    <?php else: ?>
+                                        <div class="post-placeholder">
+                                            <i class="fas fa-image"></i>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="recent-post-content">
+                                    <div class="post-meta">
+                                        <span class="post-date">
+                                            <?php echo format_date($post['created_at']); ?>
+                                        </span>
+                                    </div>
+                                    <h6 class="post-title">
+                                        <a href="blog/<?php echo $post['slug']; ?>">
+                                            <?php echo htmlspecialchars($post['title']); ?>
+                                        </a>
+                                    </h6>
+                                    <p class="post-excerpt">
+                                        <?php echo truncate_text($post['excerpt'], 100); ?>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <div class="text-center mt-4">
+            <a href="blog.php" class="btn btn-primary">
+                Tüm Yazıları Görüntüle
+            </a>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
+
+<!-- CTA Bölümü -->
+<section class="cta-section py-5">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h2 class="cta-title">Türkiye'yi Keşfetmeye Hazır mısınız?</h2>
+                <p class="cta-subtitle">
+                    Binlerce şehir ve ilçe, eşsiz lezzetler, tarihi mekanlar ve kültürel zenginlikler sizi bekliyor.
+                </p>
+                <div class="cta-buttons">
+                    <a href="sehirler.php" class="btn btn-primary btn-lg me-3">
+                        <i class="fas fa-map-marked-alt me-2"></i>
+                        Şehirleri Keşfet
+                    </a>
+                    <a href="blog.php" class="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-newspaper me-2"></i>
+                        Rehberleri Oku
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <?php include 'includes/footer.php'; ?>

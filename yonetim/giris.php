@@ -1,12 +1,12 @@
 <?php
 /**
- * Yönetici Giriş Sayfası
- * Yerel Tanıtım - Özel PHP Scripti
+ * Admin Login Page
+ * Yereltanitim.com - Turkey Tourism Website
  */
 
 require_once '../config/config.php';
 
-// Zaten giriş yapılmışsa yönlendir
+// Redirect if already logged in
 if (is_admin_logged_in()) {
     redirect(ADMIN_URL . '/index.php');
 }
@@ -29,12 +29,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $admin = $stmt->fetch();
         
         if ($admin && password_verify($password, $admin['password'])) {
-            // Giriş başarılı
+            // Login successful
             $_SESSION['admin_logged_in'] = true;
             $_SESSION['admin_id'] = $admin['id'];
             $_SESSION['admin_username'] = $admin['username'];
             
-            // Son giriş zamanını güncelle
+            // Update last login
             $updateQuery = "UPDATE admin_users SET last_login = NOW() WHERE id = :id";
             $updateStmt = $db->prepare($updateQuery);
             $updateStmt->bindParam(':id', $admin['id']);
@@ -54,56 +54,91 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yönetici Girişi - <?php echo get_setting('site_title'); ?></title>
+    <title>Yönetici Girişi - Yereltanitim.com</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
         }
         .login-card {
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
             overflow: hidden;
+            max-width: 450px;
+            width: 100%;
         }
         .login-header {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
             color: white;
-            padding: 2rem;
+            padding: 3rem 2rem 2rem;
             text-align: center;
         }
         .login-body {
-            padding: 2rem;
+            padding: 2.5rem;
+        }
+        .form-control {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
         }
         .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            border-color: #2563eb;
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.1);
         }
         .btn-login {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
             border: none;
-            padding: 12px;
+            border-radius: 12px;
+            padding: 0.75rem 2rem;
             font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
         }
         .btn-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+        }
+        .form-label {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        .alert {
+            border-radius: 12px;
+            border: none;
+        }
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-5">
+            <div class="col-md-6">
                 <div class="login-card">
                     <div class="login-header">
-                        <i class="fas fa-map-marked-alt fa-3x mb-3"></i>
-                        <h3>Yönetim Paneli</h3>
-                        <p class="mb-0">Yerel Tanıtım Yönetim Sistemi</p>
+                        <div class="logo-icon">
+                            <i class="fas fa-map-marked-alt fa-2x"></i>
+                        </div>
+                        <h3 class="mb-2">Yönetim Paneli</h3>
+                        <p class="mb-0 opacity-75">Yereltanitim.com Admin Sistemi</p>
                     </div>
                     <div class="login-body">
                         <?php if ($error): ?>
@@ -118,14 +153,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <label for="username" class="form-label">
                                     <i class="fas fa-user me-2"></i>Kullanıcı Adı
                                 </label>
-                                <input type="text" class="form-control" id="username" name="username" required>
+                                <input type="text" class="form-control" id="username" name="username" 
+                                       placeholder="Kullanıcı adınızı girin" required>
                             </div>
                             
                             <div class="mb-4">
                                 <label for="password" class="form-label">
                                     <i class="fas fa-lock me-2"></i>Şifre
                                 </label>
-                                <input type="password" class="form-control" id="password" name="password" required>
+                                <input type="password" class="form-control" id="password" name="password" 
+                                       placeholder="Şifrenizi girin" required>
                             </div>
                             
                             <button type="submit" class="btn btn-primary btn-login w-100">
@@ -136,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="text-center mt-4">
                             <small class="text-muted">
                                 <i class="fas fa-shield-alt me-1"></i>
-                                Güvenli Yönetici Girişi
+                                Güvenli Admin Girişi
                             </small>
                         </div>
                     </div>

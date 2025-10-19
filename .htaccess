@@ -15,7 +15,7 @@ ServerSignature Off
     Deny from all
 </Files>
 
-# Prevent access to config and admin directories from direct URL
+# Prevent access to config and admin directories
 RedirectMatch 403 ^/config/.*$
 RedirectMatch 403 ^/yonetim/(?!giris\.php|cikis\.php|index\.php|.*\.(css|js|png|jpg|jpeg|gif|ico|svg)).*$
 
@@ -27,26 +27,26 @@ RedirectMatch 403 ^/yonetim/(?!giris\.php|cikis\.php|index\.php|.*\.(css|js|png|
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)/$ /$1 [R=301,L]
 
+# SEO-friendly URLs for cities
+RewriteRule ^sehir/([a-z0-9-]+)/?$ sehir.php?slug=$1 [L,QSA]
+
 # SEO-friendly URLs for districts
-RewriteRule ^istanbul/([a-z0-9-]+)/?$ ilce.php?slug=$1 [L,QSA]
-
-# SEO-friendly URLs for neighborhoods  
-RewriteRule ^mahalle/([a-z0-9-]+)/?$ semt.php?slug=$1 [L,QSA]
-
-# SEO-friendly URLs for pages
-RewriteRule ^([a-z0-9-]+)/?$ sayfa.php?slug=$1 [L,QSA]
+RewriteRule ^ilce/([a-z0-9-]+)/?$ ilce.php?slug=$1 [L,QSA]
 
 # SEO-friendly URLs for blog posts
-RewriteRule ^blog/([a-z0-9-]+)/?$ blog-yazisi.php?slug=$1 [L,QSA]
+RewriteRule ^blog/([a-z0-9-]+)/?$ blog-detay.php?slug=$1 [L,QSA]
 
-# Price calculator
-RewriteRule ^fiyat-hesapla/?$ fiyat-hesaplayici.php [L,QSA]
+# Search page
+RewriteRule ^arama/?$ arama.php [L,QSA]
 
 # Contact form handler
-RewriteRule ^iletisim-gonder/?$ iletisim-isleyici.php [L,QSA]
+RewriteRule ^iletisim-gonder/?$ iletisim-handler.php [L,QSA]
+
+# API endpoints
+RewriteRule ^api/([a-z0-9-]+)/?$ api/$1.php [L,QSA]
 
 # Sitemap
-RewriteRule ^sitemap\.xml$ site-haritasi.php [L]
+RewriteRule ^sitemap\.xml$ sitemap.php [L]
 
 # Robots.txt
 RewriteRule ^robots\.txt$ robots.php [L]
@@ -58,6 +58,7 @@ RewriteRule ^robots\.txt$ robots.php [L]
     ExpiresByType image/jpeg "access plus 1 month"
     ExpiresByType image/gif "access plus 1 month"
     ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
     ExpiresByType text/css "access plus 1 month"
     ExpiresByType application/pdf "access plus 1 month"
     ExpiresByType text/javascript "access plus 1 month"
@@ -76,6 +77,7 @@ RewriteRule ^robots\.txt$ robots.php [L]
     AddOutputFilterByType DEFLATE application/rss+xml
     AddOutputFilterByType DEFLATE application/javascript
     AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/json
 </IfModule>
 
 # Error pages

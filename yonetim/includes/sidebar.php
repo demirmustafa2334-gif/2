@@ -4,14 +4,14 @@
                     <li class="nav-item">
                         <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : ''; ?>" href="index.php">
                             <i class="fas fa-tachometer-alt"></i>
-                            Yönetim Paneli
+                            Dashboard
                         </a>
                     </li>
                     
                     <li class="nav-item">
-                        <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'sayfalar.php' ? 'active' : ''; ?>" href="sayfalar.php">
-                            <i class="fas fa-file-alt"></i>
-                            Sayfalar
+                        <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'sehirler.php' ? 'active' : ''; ?>" href="sehirler.php">
+                            <i class="fas fa-city"></i>
+                            Şehirler
                         </a>
                     </li>
                     
@@ -23,37 +23,16 @@
                     </li>
                     
                     <li class="nav-item">
-                        <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'mahalleler.php' ? 'active' : ''; ?>" href="mahalleler.php">
-                            <i class="fas fa-location-dot"></i>
-                            Mahalleler
-                        </a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'fiyatlandirma.php' ? 'active' : ''; ?>" href="fiyatlandirma.php">
-                            <i class="fas fa-dollar-sign"></i>
-                            Fiyatlandırma
-                        </a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'yorumlar.php' ? 'active' : ''; ?>" href="yorumlar.php">
-                            <i class="fas fa-star"></i>
-                            Yorumlar
-                            <?php 
-                            $reviewModel = new Review();
-                            $pendingCount = $reviewModel->count('is_approved = 0');
-                            if ($pendingCount > 0): 
-                            ?>
-                                <span class="badge bg-warning ms-2"><?php echo $pendingCount; ?></span>
-                            <?php endif; ?>
-                        </a>
-                    </li>
-                    
-                    <li class="nav-item">
                         <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'blog.php' ? 'active' : ''; ?>" href="blog.php">
-                            <i class="fas fa-blog"></i>
-                            Blog
+                            <i class="fas fa-newspaper"></i>
+                            Blog Yazıları
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'ai-yazi-olustur.php' ? 'active' : ''; ?>" href="ai-yazi-olustur.php">
+                            <i class="fas fa-robot"></i>
+                            AI Yazı Oluştur
                         </a>
                     </li>
                     
@@ -73,6 +52,32 @@
                 </ul>
                 
                 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-uppercase text-light">
+                    <span>İçerik Yönetimi</span>
+                </h6>
+                <ul class="nav flex-column mb-2">
+                    <li class="nav-item">
+                        <a class="nav-link" href="sehir-ekle.php">
+                            <i class="fas fa-plus"></i>
+                            Yeni Şehir Ekle
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="blog-ekle.php">
+                            <i class="fas fa-pen"></i>
+                            Yeni Yazı Ekle
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="toplu-icerik.php">
+                            <i class="fas fa-layer-group"></i>
+                            Toplu İçerik
+                        </a>
+                    </li>
+                </ul>
+                
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-uppercase text-light">
                     <span>Ayarlar</span>
                 </h6>
                 <ul class="nav flex-column mb-2">
@@ -84,16 +89,23 @@
                     </li>
                     
                     <li class="nav-item">
-                        <a class="nav-link" href="../anasayfa.php" target="_blank">
+                        <a class="nav-link" href="../index.php" target="_blank">
                             <i class="fas fa-external-link-alt"></i>
                             Siteyi Görüntüle
                         </a>
                     </li>
                     
                     <li class="nav-item">
-                        <a class="nav-link" href="../site-haritasi.php" target="_blank">
+                        <a class="nav-link" href="../sitemap.xml" target="_blank">
                             <i class="fas fa-sitemap"></i>
                             Site Haritası
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="yedekleme.php">
+                            <i class="fas fa-download"></i>
+                            Yedekleme
                         </a>
                     </li>
                 </ul>

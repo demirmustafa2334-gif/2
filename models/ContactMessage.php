@@ -1,7 +1,7 @@
 <?php
 /**
  * Contact Message Model
- * Istanbul Moving Company - Custom PHP Script
+ * Yereltanitim.com - Turkey Tourism Website
  */
 
 class ContactMessage extends BaseModel {
@@ -30,8 +30,7 @@ class ContactMessage extends BaseModel {
             'name' => sanitize_input($data['name']),
             'email' => filter_var($data['email'], FILTER_SANITIZE_EMAIL),
             'phone' => sanitize_input($data['phone'] ?? ''),
-            'from_district' => sanitize_input($data['from_district'] ?? ''),
-            'to_district' => sanitize_input($data['to_district'] ?? ''),
+            'subject' => sanitize_input($data['subject'] ?? ''),
             'message' => sanitize_input($data['message']),
             'is_read' => 0
         ];
@@ -55,13 +54,12 @@ class ContactMessage extends BaseModel {
         Ad Soyad: {$messageData['name']}\n
         E-posta: {$messageData['email']}\n
         Telefon: {$messageData['phone']}\n
-        Nereden: {$messageData['from_district']}\n
-        Nereye: {$messageData['to_district']}\n
+        Konu: {$messageData['subject']}\n
         Mesaj: {$messageData['message']}\n\n
         Tarih: " . date('d.m.Y H:i') . "\n
         ";
         
-        $headers = "From: noreply@" . $_SERVER['HTTP_HOST'] . "\r\n";
+        $headers = "From: noreply@yereltanitim.com\r\n";
         $headers .= "Reply-To: {$messageData['email']}\r\n";
         $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
         

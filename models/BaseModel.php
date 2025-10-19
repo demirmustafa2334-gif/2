@@ -1,7 +1,7 @@
 <?php
 /**
  * Base Model Class
- * Istanbul Moving Company - Custom PHP Script
+ * Yereltanitim.com - Turkey Tourism Website
  */
 
 class BaseModel {
@@ -107,6 +107,21 @@ class BaseModel {
         
         $result = $stmt->fetch();
         return $result['total'];
+    }
+    
+    public function search($term, $fields = ['name']) {
+        $conditions = [];
+        foreach ($fields as $field) {
+            $conditions[] = "{$field} LIKE :term";
+        }
+        
+        $query = "SELECT * FROM {$this->table} WHERE " . implode(' OR ', $conditions);
+        $stmt = $this->db->prepare($query);
+        $searchTerm = '%' . $term . '%';
+        $stmt->bindParam(':term', $searchTerm);
+        $stmt->execute();
+        
+        return $stmt->fetchAll();
     }
 }
 ?>
